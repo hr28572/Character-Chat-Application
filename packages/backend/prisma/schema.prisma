@@ -1,0 +1,25 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Character {
+  id        Int     @id @default(autoincrement())
+  name      String
+  slug      String  @unique
+  avatarUrl String?
+  description String
+  promptTemplate String
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  conversationId String
+  role       String   // "user" | "character" | "system"
+  content    String
+  createdAt  DateTime @default(now())
+}

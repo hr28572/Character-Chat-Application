@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: chatapp
+      POSTGRES_USER: chatuser
+      POSTGRES_PASSWORD: chatpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./packages/backend
+    environment:
+      DATABASE_URL: postgresql://chatuser:chatpass@db:5432/chatapp?schema=public
+      PORT: 3000
+      OPENAI_API_KEY: "sk-proj-UajkfPAH5QA-g3WQJMWA9AohA8X-TestKey"
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./packages/backend:/usr/src/app
+volumes:
+  pgdata:
